@@ -1,0 +1,58 @@
+void angle(char a,float degree) // Beauty of control system
+{
+	int c,d,l=0;
+	lcd_cursor(1,1);
+	if(a=='r')
+	{
+		navi=navi-degree;
+	}		
+	else if(a=='l')
+	{
+		navi=navi+degree;
+	}		
+	c=TCCR5A;// storing register value in temp data
+	d=TCCR5B;
+	TCCR5A=0x00;// disconnecting OC pins
+	TCCR5B=0x00;
+	DDRA=DDRA|0x0F;//declaring as output
+	DDRL=DDRL|0x18;
+	PORTL=PORTL|0x18;//logic one to pin 4 and 5 for enabling the motor driver
+	float b=0,e=degree;
+	l_encode=0;
+	r_encode=0;
+	while(1)
+	{
+		if(e>0)
+		{
+			if(a=='r')
+			{
+				PORTA=0b00001010;
+				delayms(e/8);
+				b=((0.067)*r_encode); //feedback constant  
+				e=e-b;
+			}
+			else if(a=='l')
+			{
+				PORTA=0b00000101;
+				delayms(e/8);
+				b=((0.067)*r_encode); // feedback constant
+				e=e-b;
+			}
+		}
+		else
+		{
+			l++;
+			r_encode=0;
+			PORTA=0xFF-PORTA;
+			delayms(e/15);
+			b=((0.04)*r_encode); // feedback constant 
+			e=e+b;
+			if(l==250)
+			break;
+		}
+	}
+	PORTA=0x00;
+	TCCR5A=c;
+	TCCR5B=d;
+	navigation();
+}

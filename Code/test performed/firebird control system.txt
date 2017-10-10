@@ -1,0 +1,47 @@
+void sdistance(char a,float cm)
+{
+	int c,d;
+	if(dis1==0)
+	dis=cm;
+	lcd_init();
+	c=TCCR5A;// storing in temp data
+	d=TCCR5B;
+	TCCR5A=0x00;// disconnecting OC pins
+	TCCR5B=0x00;
+	DDRA=DDRA|0x0F;//declaring as output
+	DDRL=DDRL|0x18;
+	PORTL=PORTL|0x18;//logic one to pin 4 and 5 for enabling the motor driver
+	float b=0;
+	r_encode=0; //clearing encoder value
+	l_encode=0;
+	if(a=='f')
+	{
+		dis1++;
+		PORTA=0b00000110;
+		lcd_gotoxy(0,0);
+		lcd_string("Forward:-");
+		lcd_showvalue(dis);
+	}
+	else if(a=='b')
+	{
+		dis1++;
+		PORTA=0b00001001;
+		lcd_gotoxy(0,0);
+		lcd_string("Backward:-");
+		lcd_showvalue(dis);
+	}
+	b=14*r_encode;
+	if(cm-b>0.544)
+	{
+		sdistance(a,cm-b);
+	}
+	else
+	{
+		PORTA=0x00;
+		TCCR5A=c; //again restoring previous values
+		TCCR5B=d;
+		dis=0;
+		dis1=0;
+		return(0);
+	}		
+}
