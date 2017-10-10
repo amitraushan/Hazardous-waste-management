@@ -1,0 +1,153 @@
+Programming AVRs with AVRDUDE and USBAsp.
+
+Avrdude needs to be compiled separately from the C source.In addition to this Avrdude needs USB support in the form of USB drivers. To get around this simply install WinAVR. It installs both Avrdude and the USB drivers.
+
+Please refer to the avrdude documentation for an explanation of what each options do. (avrdude-doc-5.4.pdf)
+
+It is assumed that WinAVR has already been installed.
+
+If Avrdude is unable to detect the USB programmer it shows up a message on the command prompt.
+
+
+
+transferring a hex file to the AVR.
+
+1) Go to START. Click run.
+
+2) Type cmd and hit enter.
+
+3) The command prompt opens where you type commands for avrdude.
+
+
+************************************************************************************************************************
+
+Eg 1. Transfer a file called example1.hex to a Mega128 device.
+
+Type avrdude -c usbasp -p m128 -P usb -U flash:w:example1.hex
+
+************************************************************************************************************************
+
+Eg 2. Transfer a file called "example1.hex" present on Desktop to a Mega128 device and change hfuse to 0xfe and lfuse to       0xdc.
+
+Type avrdude -c usbasp -p m128 -P usb -U flash:w:example1.hex -U hfuse:w:0xfe:m lfuse:w:0xdc:m
+
+************************************************************************************************************************
+
+Eg 3. View Avrdude's version number and other details.
+
+Type avrdude -v
+
+************************************************************************************************************************
+
+Eg 4. Read the contents of the FLASH memory and store them in a file called test1.hex
+
+Type avrdude -c usbasp -p m128 -P usb -U flash:r:"c:\test1.hex":i
+
+************************************************************************************************************************
+
+Eg 5. Read the contents of the EEPROM memory and store them in a file called test1.eep
+
+Type avrdude -c usbasp -p m128 -P usb -U eeprom:r:"c:\test1.eep":i
+
+************************************************************************************************************************
+Eg 6. Read the contents of HFUSE and LFUSE and store them in files hfuse.hex and lfuse.hex
+
+Type avrdude -c usbasp -p m128 -P usb -U hfuse:r:"c:\hfuse.hex":i -U lfuse:r:"c:\lfuse.hex":i
+
+************************************************************************************************************************
+Eg 7. Read device signature bytes and store them in a file called sig.hex
+
+Type avrdude -c usbasp -p m128 -P usb -U signature:r:"c:\signature.hex":i
+
+Note: - The signature bytes are fixed for a specific AVR device
+
+************************************************************************************************************************
+Eg 8. Read device lock bytes and store them in a file called lock.hex
+
+Type avrdude -c usbasp -p m128 -P usb -U lock:r:"c:\lock.hex":i
+
+************************************************************************************************************************
+Eg 9.Read device RC oscillator calibration bytes and store them in a file called calibration.hex
+
+Type avrdude -c usbasp -p m128 -P usb -U calibration:r:"c:\calibration.hex":i
+
+************************************************************************************************************************
+Eg 10. Erase the chip
+
+Type avrdude -c usbasp -p m128 -P usb -e
+
+************************************************************************************************************************
+Eg 11. Entering terminal mode
+       In this mode you can communicate with the AVR device in an interactive manner. This mode is useful for Reading/Writing        single bytes into the device	
+
+Type avrdude -c usbasp -P usb -p m128 -t
+
+In this mode you can issue commands that read/write data from the AVR device.
+
+************************************************************************************************************************
+Eg 12. In the interactive mode dump contents of flash memory from location 0 to location 128
+
+Type dump flash 0 128
+
+************************************************************************************************************************
+Eg 13. In the interactive mode dump another N bytes of flash memory from where the last dump command left off 
+
+Type dump flash
+
+************************************************************************************************************************
+Eg 14. Erase the chip (In interactive mode)
+
+Type erase
+
+************************************************************************************************************************
+Eg 15. Obtain information about the various commands supported by avrdude (In interactive mode)
+
+Type ?
+
+or
+
+Type help
+
+************************************************************************************************************************
+Eg 16. Display the current part settings and parameters. Includes chip specific information
+       including all memory types supported by the device, read/write timing,
+       etc (In interactive mode)
+
+Type part
+
+************************************************************************************************************************
+Eg 17. Dump the contents of the EEPROM (In interactive mode)
+
+Type dump eeprom
+
+************************************************************************************************************************
+Eg 18. Dump the contents of the hfuse (In interactive mode)
+
+Type dump hfuse
+
+************************************************************************************************************************
+Eg 19. Dump the contents of the lfuse (In interactive mode)
+
+Type dump lfuse
+
+************************************************************************************************************************
+Eg 20. Dump the contents of the efuse (In interactive mode)
+
+Type dump efuse
+
+************************************************************************************************************************
+Eg 21. Display the device signature bytes (In interactive mode)
+
+Type sig
+
+************************************************************************************************************************
+Eg 22. Dump the contents of the EEPROM from location 0 to 9 (In interactive mode)
+
+Type dump eeprom 0 9
+
+************************************************************************************************************************
+Eg 23. Quit avrdude (In interactive mode)
+
+Type quit
+
+************************************************************************************************************************
